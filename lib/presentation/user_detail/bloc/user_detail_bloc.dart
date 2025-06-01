@@ -1,5 +1,7 @@
+import 'package:nineti_connect/data/models/user_detail/post_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nineti_connect/data/repo/user_repo.dart';
+import 'package:nineti_connect/presentation/post_screen/bloc/local_post.dart';
 import 'package:nineti_connect/presentation/user_detail/bloc/user_detail_event.dart';
 import 'package:nineti_connect/presentation/user_detail/bloc/user_detail_state.dart';
 
@@ -8,10 +10,13 @@ class UserDetailBloc extends Bloc<UserDetailEvent, UserDetailState> {
 
   UserDetailBloc(this.repository) : super(const UserDetailState()) {
     on<FetchUserDetails>(_onFetchUserDetails);
+    on<AddLocalPost>(_onAddLocalPost);
   }
 
   Future<void> _onFetchUserDetails(
-      FetchUserDetails event, Emitter<UserDetailState> emit) async {
+    FetchUserDetails event,
+    Emitter<UserDetailState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true, error: null));
 
     try {
@@ -21,5 +26,11 @@ class UserDetailBloc extends Bloc<UserDetailEvent, UserDetailState> {
     } catch (e) {
       emit(state.copyWith(error: e.toString(), isLoading: false));
     }
+  }
+
+  void _onAddLocalPost(AddLocalPost event, Emitter<UserDetailState> emit) {
+    final newPost = PostModel(id: -1, title: event.title, body: event.body);
+    final updatedPosts = [newPost, ...state.posts];
+    emit(state.copyWith(posts: updatedPosts));
   }
 }
