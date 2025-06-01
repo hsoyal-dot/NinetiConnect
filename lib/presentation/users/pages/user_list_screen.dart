@@ -143,7 +143,13 @@ class _UserListScreenState extends State<UserListScreen> {
                                 color: AppColors.secondaryText,
                               ),
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/user-details',
+                                arguments: user,
+                              );
+                            },
                           ),
                         );
                       },

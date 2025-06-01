@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nineti_connect/data/models/user_model.dart';
+import 'package:nineti_connect/data/models/user_list/user_model.dart';
 import 'package:nineti_connect/data/repo/user_repo.dart';
 import 'user_event.dart';
 import 'user_state.dart';

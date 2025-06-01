@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:nineti_connect/data/models/user_model.dart';
+import 'package:nineti_connect/data/models/user_list/user_model.dart';
 
 abstract class UserState extends Equatable {
   @override
