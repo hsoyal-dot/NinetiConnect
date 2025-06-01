@@ -6,6 +6,7 @@ import 'package:nineti_connect/core/configs/assets/app_vectors.dart';
 import 'package:nineti_connect/core/configs/theme/app_colors.dart';
 import 'package:nineti_connect/data/models/user_list/user_model.dart';
 import 'package:nineti_connect/data/repo/user_repo.dart';
+import 'package:nineti_connect/presentation/post_screen/bloc/local_post.dart';
 import 'package:nineti_connect/presentation/user_detail/bloc/user_detail_bloc.dart';
 import 'package:nineti_connect/presentation/user_detail/bloc/user_detail_event.dart';
 import 'package:nineti_connect/presentation/user_detail/bloc/user_detail_state.dart';
@@ -118,7 +119,18 @@ class UserDetailScreen extends StatelessWidget {
                           ),
                           padding: const EdgeInsets.fromLTRB(130, 14, 130, 14)
                         ),
-                        onPressed: () {},
+                        onPressed: () async{
+                          final result = await Navigator.pushNamed(context, '/create-post');
+                          if(result != null && context.mounted){
+                            final newPost = result as Map<String, String>;
+
+                            //TODO: Add Bloc
+                            context.read<UserDetailBloc>().add(AddLocalPost(
+                              newPost['title']!,
+                              newPost['body']!,
+                            ));
+                          }  
+                        },
                         child: Text(
                           'Create Post',
                           style: GoogleFonts.manrope(

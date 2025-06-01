@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nineti_connect/core/configs/theme/app_colors.dart';
 import 'package:nineti_connect/data/repo/user_repo.dart';
+import 'package:nineti_connect/presentation/post_screen/pages/create_post_screen.dart';
 import 'package:nineti_connect/presentation/user_detail/pages/user_detail_screen.dart';
 import 'package:nineti_connect/presentation/users/bloc/user_bloc.dart';
 import 'package:nineti_connect/presentation/users/pages/user_list_screen.dart';
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
         create: (context) => UserBloc(context.read<UserRepository>()),
         child: const UserListScreen(),
       ),
-      routes: {'/user-details': (context) => const UserDetailScreen()},
+      routes: {
+        '/user-details': (context) => const UserDetailScreen(),
+        '/create-post': (context) => const CreatePostScreen(),
+        },
     );
   }
 }
