@@ -94,65 +94,70 @@ class _UserListScreenState extends State<UserListScreen> {
                       ),
                     );
                   } else if (state is UserLoaded) {
-                    return ListView.builder(
-                      controller: _scrollController,
-                      itemCount: state.users.length + (state.hasMore ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index >= state.users.length) {
-                          return const Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Center(
-                              child: SizedBox(
-                                width: 32,
-                                height: 32,
-                                child: CircularProgressIndicator.adaptive(
-                                  strokeWidth: 3,
-                                  backgroundColor: Colors.grey,
+                    return RefreshIndicator.adaptive(
+                      onRefresh: () async {
+                        context.read<UserBloc>().add(FetchUsers(isInitialLoad: true));
+                      },
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        itemCount: state.users.length + (state.hasMore ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index >= state.users.length) {
+                            return const Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Center(
+                                child: SizedBox(
+                                  width: 32,
+                                  height: 32,
+                                  child: CircularProgressIndicator.adaptive(
+                                    strokeWidth: 3,
+                                    backgroundColor: Colors.grey,
+                                  ),
                                 ),
                               ),
+                            );
+                          }
+                      
+                          final user = state.users[index];
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(user.image),
+                                radius: 24,
+                              ),
+                              title: Text(
+                                '${user.firstName} ${user.lastName}',
+                                style: GoogleFonts.manrope(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.primaryText,
+                                ),
+                              ),
+                              subtitle: Text(
+                                user.email,
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.secondaryText,
+                                ),
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/user-details',
+                                  arguments: user,
+                                );
+                              },
                             ),
                           );
-                        }
-
-                        final user = state.users[index];
-                        return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage(user.image),
-                              radius: 24,
-                            ),
-                            title: Text(
-                              '${user.firstName} ${user.lastName}',
-                              style: GoogleFonts.manrope(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.primaryText,
-                              ),
-                            ),
-                            subtitle: Text(
-                              user.email,
-                              style: GoogleFonts.dmSans(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.secondaryText,
-                              ),
-                            ),
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/user-details',
-                                arguments: user,
-                              );
-                            },
-                          ),
-                        );
-                      },
+                        },
+                      ),
                     );
                   } else if (state is UserError) {
                     return Center(child: Text('Error: ${state.message}'));

@@ -173,26 +173,44 @@ class UserDetailScreen extends StatelessWidget {
                           Expanded(
                             child: TabBarView(
                               children: [
-                                ListView(
-                                  children: state.posts
-                                      .map(
-                                        (post) => ListTile(
-                                          title: Text(post.title),
-                                          subtitle: Text(post.body),
-                                        ),
-                                      )
-                                      .toList(),
+                                RefreshIndicator(
+                                  color: AppColors.primaryText,
+                                  backgroundColor: AppColors.componentColor,
+                                  strokeWidth: 2,
+                                  displacement: 30,
+                                  onRefresh: () async {
+                                    context.read<UserDetailBloc>().add(FetchUserDetails(user.id));
+                                  },
+                                  child: ListView(
+                                    children: state.posts
+                                        .map(
+                                          (post) => ListTile(
+                                            title: Text(post.title),
+                                            subtitle: Text(post.body),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
                                 ),
-                                ListView(
-                                  children: state.todos
-                                      .map(
-                                        (todo) => CheckboxListTile(
-                                          title: Text(todo.todo),
-                                          value: todo.completed,
-                                          onChanged: null,
-                                        ),
-                                      )
-                                      .toList(),
+                                RefreshIndicator(
+                                  color: AppColors.primaryText,
+                                  backgroundColor: AppColors.componentColor,
+                                  strokeWidth: 2,
+                                  displacement: 30,
+                                  onRefresh: () async {
+                                    context.read<UserDetailBloc>().add(FetchUserDetails(user.id));
+                                  },
+                                  child: ListView(
+                                    children: state.todos
+                                        .map(
+                                          (todo) => CheckboxListTile(
+                                            title: Text(todo.todo),
+                                            value: todo.completed,
+                                            onChanged: null,
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
                                 ),
                               ],
                             ),
